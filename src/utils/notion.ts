@@ -1,7 +1,11 @@
 // @/lib/notion.ts
 
 import { Client } from '@notionhq/client';
-import type { QueryDatabaseResponse, PageObjectResponse, BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import type {
+  QueryDatabaseResponse,
+  BlockObjectResponse,
+  PartialBlockObjectResponse,
+} from '@notionhq/client/build/src/api-endpoints';
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
@@ -15,7 +19,7 @@ type Post = {
   Authors: string[];
   Preview?: string[];
   Tags: string[];
-  Content?: BlockObjectResponse[]; // Add Content field
+  Content?: (BlockObjectResponse | PartialBlockObjectResponse)[]; // Add Content field
   hasTweet?: boolean; // Optionally track if the post has tweets
 };
 
@@ -30,7 +34,9 @@ type Users = {
 export async function getBlogIndex(): Promise<PostsTable> {
   const databaseId = process.env.NOTION_BLOG_DATABASE_ID;
   if (!databaseId) {
-    throw new Error('NOTION_BLOG_DATABASE_ID is not defined in the environment variables');
+    throw new Error(
+      'NOTION_BLOG_DATABASE_ID is not defined in the environment variables'
+    );
   }
 
   const response: QueryDatabaseResponse = await notion.databases.query({
@@ -47,8 +53,10 @@ export async function getBlogIndex(): Promise<PostsTable> {
           Slug: slug,
           Date: properties.Date?.date?.start || null,
           Published: properties.Published?.checkbox,
-          Authors: properties.Authors?.people.map((author: any) => author.id) || [],
-          Preview: properties.Preview?.rich_text.map((rt: any) => rt.plain_text) || [],
+          Authors:
+            properties.Authors?.people.map((author: any) => author.id) || [],
+          Preview:
+            properties.Preview?.rich_text.map((rt: any) => rt.plain_text) || [],
           Tags: properties.Tags?.multi_select.map((tag: any) => tag.name) || [],
         };
       }
@@ -59,7 +67,9 @@ export async function getBlogIndex(): Promise<PostsTable> {
   return postsTable;
 }
 
-export async function getNotionUsers(userIds: string[]): Promise<{ users: Users }> {
+export async function getNotionUsers(
+  userIds: string[]
+): Promise<{ users: Users }> {
   const users: Users = {};
   await Promise.all(
     userIds.map(async (userId) => {
@@ -72,7 +82,6 @@ export async function getNotionUsers(userIds: string[]): Promise<{ users: Users 
 }
 
 async function getPageIdFromSlug(slug: string): Promise<string | undefined> {
-  console.log('get pageid for slug', slug);
   // Implement this function to map Slug to pageId
   // This is just a placeholder implementation
   // You might need to query Notion or have a pre-defined mapping
@@ -85,14 +94,12 @@ async function getPageIdFromSlug(slug: string): Promise<string | undefined> {
       },
     },
   });
-  console.log('response', response);
-
   const page = response.results[0];
   return page?.id;
 }
 
-export async function getPageData(post: Post): Promise<BlockObjectResponse[]> {
-  const blocks: BlockObjectResponse[] = [];
+export async function getPageData(post: Post): Promise<(BlockObjectResponse | PartialBlockObjectResponse)[]> {
+  const blocks: (BlockObjectResponse | PartialBlockObjectResponse)[] = [];
 
   // Get pageId from the post's Slug
   const pageId = await getPageIdFromSlug(post.Slug);
@@ -126,8 +133,6 @@ export async function getPostData(slug: string, preview: boolean) {
     return null;
   }
 
-  console.log('post', post);
-
   // Get pageId from the post's Slug
   const pageId = await getPageIdFromSlug(post.Slug);
   if (!pageId) {
@@ -137,32 +142,12 @@ export async function getPostData(slug: string, preview: boolean) {
   const postData = await getPageData(post);
   post.Content = postData;
 
-  for (let i = 0; i < postData.length; i++) {
-    const block = postData[i];
-    if (block.type === 'tweet') {
-      const src = block.tweet.source[0][0];
-      const tweetId = src.split('/')[5].split('?')[0];
-      if (!tweetId) continue;
-
-      try {
-        const res = await fetch(
-          `https://api.twitter.com/1/statuses/oembed.json?id=${tweetId}`
-        );
-        const json = await res.json();
-        block.properties.html = json.html.split('<script')[0];
-        post.hasTweet = true;
-      } catch (_) {
-        console.log(`Failed to get tweet embed for ${src}`);
-      }
-    }
-  }
-
   const authorIds = post.Authors || [];
-  const authorFetchPromises = authorIds.map(id =>
+  const authorFetchPromises = authorIds.map((id) =>
     notion.users.retrieve({ user_id: id })
   );
   const authorResults = await Promise.all(authorFetchPromises);
-  post.Authors = authorResults.map(user => user.name || 'Unknown');
+  post.Authors = authorResults.map((user) => user.name || 'Unknown');
 
   return post;
 }

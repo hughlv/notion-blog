@@ -14,12 +14,10 @@ import { getBlogIndex, getNotionUsers } from '@/utils/notion';
 // Fetch data during build time
 export const revalidate = 10; // Revalidate data every 10 seconds
 
-export default async function BlogPage({ searchParams }) {
+export default async function BlogPage({ searchParams }: any) {
   const preview = searchParams.preview === 'true';
 
   const postsTable = await getBlogIndex();
-
-  console.log(postsTable);
 
   const authorsToGet = new Set<string>();
   const posts: any[] = Object.keys(postsTable)
@@ -40,7 +38,9 @@ export default async function BlogPage({ searchParams }) {
   const { users } = await getNotionUsers([...authorsToGet]);
 
   posts.forEach((post) => {
-    post.Authors = post.Authors.map((id) => users[id]?.full_name || 'Unknown');
+    post.Authors = post.Authors.map(
+      (id: string) => users[id]?.full_name || 'Unknown'
+    );
   });
 
   return (
@@ -69,9 +69,7 @@ export default async function BlogPage({ searchParams }) {
                 {!post.Published && (
                   <span className={blogStyles.draftBadge}>Draft</span>
                 )}
-                <Link href={`/blog/${post.Slug}`}>
-                  {post.Page}
-                </Link>
+                <Link href={`/blog/${post.Slug}`}>{post.Page}</Link>
               </span>
             </h3>
             {post.Authors.length > 0 && (
@@ -80,11 +78,13 @@ export default async function BlogPage({ searchParams }) {
             {post.Date && (
               <div className="posted">Posted: {getDateStr(post.Date)}</div>
             )}
-            <p>
-              {(!post.Preview || post.Preview.length === 0) && 'No preview available'}
-              {(post.Preview || []).map((block, idx) => { block }
-              )}
-            </p>
+
+            {(!post.Preview || post.Preview.length === 0) && (
+              <p>'No preview available'</p>
+            )}
+            {(post.Preview || []).map((block: string, idx: number) => (
+              <p key={idx}>{block}</p>
+            ))}
           </div>
         ))}
       </div>

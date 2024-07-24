@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import clsx from 'clsx';
-import 'katex/dist/katex.css'
+import 'katex/dist/katex.css';
 import Footer from '@/components/footer';
 
 const inter = Inter({ subsets: ['latin'] });

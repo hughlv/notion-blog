@@ -1,6 +1,5 @@
-import dynamic from 'next/dynamic'
-import ExtLink from './ext-link'
-import { XEmbed } from 'react-social-media-embed';
+import dynamic from 'next/dynamic';
+import ExtLink from './extlink';
 
 export default {
   // default tags
@@ -15,4 +14,4 @@ export default {
   Counter: dynamic(() => import('./counter'), { ssr: false }),
   Equation: dynamic(() => import('./equation'), { ssr: false }),
   XEmbed: dynamic(() => import('./x'), { ssr: false }),
-}
+};

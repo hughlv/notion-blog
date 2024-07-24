@@ -6,7 +6,10 @@ export async function GET(request: Request): Promise<Response> {
   const blockId = searchParams.get('blockId');
 
   if (!assetUrl || !blockId) {
-    return NextResponse.json({ error: 'Missing assetUrl or blockId' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Missing assetUrl or blockId' },
+      { status: 400 }
+    );
   }
 
   try {
@@ -26,14 +29,23 @@ export async function GET(request: Request): Promise<Response> {
 
     // Set the appropriate headers for the response
     const headers = new Headers();
-    headers.set('Content-Type', response.headers.get('Content-Type') || 'application/octet-stream');
-    headers.set('Content-Length', response.headers.get('Content-Length') || '0');
+    headers.set(
+      'Content-Type',
+      response.headers.get('Content-Type') || 'application/octet-stream'
+    );
+    headers.set(
+      'Content-Length',
+      response.headers.get('Content-Length') || '0'
+    );
     headers.set('Content-Disposition', `inline; filename="block-${blockId}"`);
 
     // Create a response stream
     return new Response(stream, { headers });
   } catch (error) {
     console.error('Error fetching asset:', error);
-    return NextResponse.json({ error: 'Failed to fetch the asset' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to fetch the asset' },
+      { status: 500 }
+    );
   }
 }

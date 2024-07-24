@@ -1,4 +1,4 @@
-const Edit = (props) => (
+const Edit = (props: any) => (
   <svg
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -19,6 +19,6 @@ const Edit = (props) => (
     <path d="M9 8h6" />
     <path d="M17 16h6" />
   </svg>
-)
+);
 
-export default Edit
+export default Edit;

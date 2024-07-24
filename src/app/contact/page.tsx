@@ -1,13 +1,13 @@
-import Header from '@/components/header'
-import ExtLink from '@/components/ext-link'
+import Header from '@/components/header';
+import ExtLink from '@/components/extlink';
 
-import sharedStyles from '@/styles/shared.module.css'
-import contactStyles from '@/styles/contact.module.css'
+import sharedStyles from '@/styles/shared.module.css';
+import contactStyles from '@/styles/contact.module.css';
 
-import GitHub from '@/components/svgs/github'
-import Twitter from '@/components/svgs/twitter'
-import Envelope from '@/components/svgs/envelope'
-import LinkedIn from '@/components/svgs/linkedin'
+import GitHub from '@/components/svgs/github';
+import Twitter from '@/components/svgs/twitter';
+import Envelope from '@/components/svgs/envelope';
+import LinkedIn from '@/components/svgs/linkedin';
 
 const contacts = [
   {
@@ -30,7 +30,7 @@ const contacts = [
     alt: 'envelope icon',
     link: 'mailto:jj@jjsweb.site?subject=Notion Blog',
   },
-]
+];
 
 export default function Contact() {
   return (
@@ -54,10 +54,10 @@ export default function Contact() {
               <ExtLink key={link} href={link} aria-label={alt}>
                 <Comp height={32} />
               </ExtLink>
-            )
+            );
           })}
         </div>
       </div>
     </>
-  )
+  );
 }

@@ -3,7 +3,7 @@ import 'katex/dist/katex.min.css';
 import { PropsWithChildren } from 'react';
 
 function render(expression: string, displayMode: boolean): string {
-  let result: string;
+  let result: string = '';
   try {
     result = katex.renderToString(expression, { displayMode });
   } catch (e) {
@@ -25,6 +25,6 @@ const Equation = ({ children, displayMode = true }: PropsWithChildren<any>) => {
       }}
     />
   );
-}
+};
 
 export default Equation;

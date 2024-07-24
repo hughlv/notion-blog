@@ -1,7 +1,7 @@
-import Header from '@/components/header'
-import ExtLink from '@/components/ext-link'
-import Features from '@/components/features'
-import sharedStyles from '@/styles/shared.module.css'
+import Header from '@/components/header';
+import ExtLink from '@/components/extlink';
+import Features from '@/components/features';
+import sharedStyles from '@/styles/shared.module.css';
 
 export default function Index() {
   return (
@@ -34,10 +34,9 @@ export default function Index() {
             <ExtLink href="https://nextjs.org">Next.js</ExtLink> site with a{' '}
             <ExtLink href="https://notion.so">Notion</ExtLink> powered blog that
             is deployed with <ExtLink href="https://vercel.com">Vercel</ExtLink>
-            . It leverages some cool new features of Next.js 14
-            which allow us to achieve all of the benefits listed above including
-            blazing fast speeds, great local editing experience, and always
-            being available!
+            . It leverages some cool new features of Next.js 14 which allow us
+            to achieve all of the benefits listed above including blazing fast
+            speeds, great local editing experience, and always being available!
           </p>
 
           <p>
@@ -53,5 +52,5 @@ export default function Index() {
         </div>
       </div>
     </>
-  )
+  );
 }

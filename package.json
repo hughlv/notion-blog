@@ -25,7 +25,8 @@
   },
   "devDependencies": {
     "@types/katex": "0.16.7",
-    "@types/node": "20.14.11",
+    "@types/node": "20.14.12",
+    "@types/prismjs": "^1.26.4",
     "@types/react": "18.3.3",
     "lint-staged": "15.2.7",
     "pre-commit": "1.2.2",

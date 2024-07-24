@@ -1,27 +1,26 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import Header from '@/components/header'
-import Heading from '@/components/heading'
-import components from '@/components/dynamic'
-import blogStyles from '@/styles/blog.module.css'
-import { getBlogLink, getDateStr } from '@/utils/blog-helpers'
-import { getBlogIndex, getPostData } from '@/utils/notion'
-import React, { CSSProperties } from 'react'
-import { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints'
+import Link from 'next/link';
+import Header from '@/components/header';
+import Heading from '@/components/heading';
+import components from '@/components/dynamic';
+import blogStyles from '@/styles/blog.module.css';
+import { getDateStr } from '@/utils/blog-helpers';
+import { getBlogIndex, getPostData } from '@/utils/notion';
+import React from 'react';
+import { BlockObjectResponse, EmbedBlockObjectResponse, ImageBlockObjectResponse, ParagraphBlockObjectResponse, PartialBlockObjectResponse, VideoBlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
 // This function gets called at build time
 export async function generateStaticParams() {
-  const postsTable = await getBlogIndex()
+  const postsTable = await getBlogIndex();
   return Object.keys(postsTable)
     .filter((post) => postsTable[post].Published)
-    .map((slug) => ({ slug }))
+    .map((slug) => ({ slug }));
 }
 
 export default async function BlogPost({ params, searchParams }: any) {
-  const { slug } = params
-  const preview = searchParams.preview === 'true'
+  const { slug } = params;
+  const preview = searchParams.preview === 'true';
 
-  const post = await getPostData(slug, preview)
+  const post = await getPostData(slug, preview);
 
   if (!post) {
     return (
@@ -30,7 +29,7 @@ export default async function BlogPost({ params, searchParams }: any) {
           Woops! Didn't find that post, redirecting you back to the blog index
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -58,12 +57,14 @@ export default async function BlogPost({ params, searchParams }: any) {
 
         <hr />
 
-        {(!post.Content || post.Content.length === 0) ? (
+        {!post.Content || post.Content.length === 0 ? (
           <p>This post has no content</p>
-        ) : renderPostContent(post.Content)}
+        ) : (
+          renderPostContent(post.Content)
+        )}
       </article>
     </>
-  )
+  );
 }
 
 function getParentId(parent: any): string | undefined {
@@ -74,7 +75,7 @@ function getParentId(parent: any): string | undefined {
   return undefined;
 }
 
-function renderPostContent(content: BlockObjectResponse[]) {
+function renderPostContent(content: (BlockObjectResponse | PartialBlockObjectResponse)[]) {
   if (!content) return null;
 
   let listTagName: string | null = null;
@@ -88,8 +89,12 @@ function renderPostContent(content: BlockObjectResponse[]) {
     };
   } = {};
 
-  return content.map((block, blockIdx) => {
-    console.log('block', block);
+  return content.map((blockObject, blockIdx) => {
+    if (!('type' in blockObject)) {
+      // Simply ignore partial blocks
+      return null;
+    }
+    const block = blockObject as BlockObjectResponse;
     const { type, id, parent, has_children } = block;
     const properties = (block as any).properties || {}; // Adjust based on actual data structure
     const isLast = blockIdx === content.length - 1;
@@ -165,13 +170,13 @@ function renderPostContent(content: BlockObjectResponse[]) {
       case 'divider':
         break;
       case 'paragraph':
-        const { paragraph } = block as any; // Adjust based on actual data structure
+        const { paragraph } = block as ParagraphBlockObjectResponse; // Adjust based on actual data structure
         if (paragraph.rich_text) {
           toRender.push(textBlock(paragraph.rich_text, false, id));
         }
         break;
       case 'image':
-        const { image } = block as any; // Adjust based on actual data structure
+        const { image } = block as ImageBlockObjectResponse; // Adjust based on actual data structure
         if (image && image.type === 'external') {
           toRender.push(
             <img
@@ -183,18 +188,24 @@ function renderPostContent(content: BlockObjectResponse[]) {
         }
         break;
       case 'video':
-        const { video } = block as any; // Adjust based on actual data structure
+        const { video } = block as VideoBlockObjectResponse; // Adjust based on actual data structure
         if (video && video.type === 'external') {
           toRender.push(
-            <video key={id} src={video.external.url} controls loop muted autoPlay />
+            <video
+              key={id}
+              src={video.external.url}
+              controls
+              loop
+              muted
+              autoPlay
+            />
           );
         }
         break;
       case 'embed': {
-        const { embed } = block as any; // Adjust based on actual data structure
+        const { embed } = block as EmbedBlockObjectResponse; // Adjust based on actual data structure
         if (!embed || !embed.url) break;
-        const url = embed.url as string;
-        if (url.startsWith('https://x.com')) {
+        if (embed.url.startsWith('https://x.com')) {
           // toRender.push(<components.XEmbed url={embed.url} width={325} />);
         } else {
           toRender.push(<iframe src={embed.url} />);
@@ -238,7 +249,9 @@ function renderPostContent(content: BlockObjectResponse[]) {
       case 'callout': {
         toRender.push(
           <div className="callout" key={id}>
-            {(block as any).format?.page_icon && <div>{(block as any).format?.page_icon}</div>}
+            {(block as any).format?.page_icon && (
+              <div>{(block as any).format?.page_icon}</div>
+            )}
             <div className="text">
               {textBlock(properties.rich_text, true, id)}
             </div>
@@ -269,7 +282,10 @@ function renderPostContent(content: BlockObjectResponse[]) {
         break;
       }
       default:
-        if (process.env.NODE_ENV !== 'production' && !['bulleted_list_item', 'numbered_list_item'].includes(type)) {
+        if (
+          process.env.NODE_ENV !== 'production' &&
+          !['bulleted_list_item', 'numbered_list_item'].includes(type)
+        ) {
           console.log('unknown type', type);
         }
         break;

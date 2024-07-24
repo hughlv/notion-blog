@@ -1,8 +1,8 @@
-"use client";
-import Prism from 'prismjs'
-import 'prismjs/components/prism-jsx'
+'use client';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-jsx';
 
-const Code = ({ children, language = 'javascript' }) => {
+const Code = ({ children, language = 'javascript' }: any) => {
   return (
     <>
       <pre>
@@ -12,6 +12,7 @@ const Code = ({ children, language = 'javascript' }) => {
               children,
               Prism.languages[language.toLowerCase()] ||
               Prism.languages.javascript
+              , language.toLowerCase()
             ),
           }}
         />
@@ -33,7 +34,7 @@ const Code = ({ children, language = 'javascript' }) => {
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default Code
+export default Code;

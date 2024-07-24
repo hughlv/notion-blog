@@ -1,4 +1,4 @@
-const Jamstack = (props) => (
+const Jamstack = (props: any) => (
   <svg
     width="24"
     height="24"
@@ -13,6 +13,6 @@ const Jamstack = (props) => (
   >
     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
   </svg>
-)
+);
 
-export default Jamstack
+export default Jamstack;

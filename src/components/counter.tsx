@@ -1,8 +1,8 @@
-'use client'
-import React, { useState } from 'react'
+'use client';
+import React, { useState } from 'react';
 
-const Counter = ({ initialValue }) => {
-  const [clicks, setClicks] = useState(initialValue)
+const Counter = ({ initialValue }: any) => {
+  const [clicks, setClicks] = useState(initialValue);
 
   return (
     <div style={{ margin: '10px 0 20px' }}>
@@ -10,7 +10,7 @@ const Counter = ({ initialValue }) => {
       <button onClick={() => setClicks(clicks + 1)}>increase count</button>
       <button onClick={() => setClicks(clicks - 1)}>decrease count</button>
     </div>
-  )
-}
+  );
+};
 
-export default Counter
+export default Counter;

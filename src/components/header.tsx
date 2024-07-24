@@ -1,21 +1,21 @@
-'use client'
-import Link from 'next/link'
-import Head from 'next/head'
-import ExtLink from './ext-link'
-import { usePathname } from 'next/navigation'
-import styles from '../styles/header.module.css'
+'use client';
+import Link from 'next/link';
+import Head from 'next/head';
+import ExtLink from './extlink';
+import { usePathname } from 'next/navigation';
+import styles from '../styles/header.module.css';
 
 const navItems: { label: string; page?: string; link?: string }[] = [
   { label: 'Home', page: '/' },
   { label: 'Blog', page: '/blog' },
   { label: 'Contact', page: '/contact' },
   { label: 'Source Code', link: 'https://github.com/lyuai/notion-blog' },
-]
+];
 
-const ogImageUrl = 'https://notion-blog.now.sh/og-image.png'
+const ogImageUrl = 'https://notion-blog.now.sh/og-image.png';
 
 const Header = ({ titlePre = '' }) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <header className={styles.header}>
@@ -35,7 +35,10 @@ const Header = ({ titlePre = '' }) => {
         {navItems.map(({ label, page, link }) => (
           <li key={label}>
             {page ? (
-              <Link href={page} className={pathname === page ? 'active' : undefined}>
+              <Link
+                href={page}
+                className={((page === '/' && pathname === '/') || (page !== '/' && pathname.startsWith(page))) ? 'active' : undefined}
+              >
                 {label}
               </Link>
             ) : (
@@ -45,7 +48,7 @@ const Header = ({ titlePre = '' }) => {
         ))}
       </ul>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
