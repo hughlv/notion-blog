@@ -1,10 +1,15 @@
-# Notion Blog
+# Notion Blog for Nextjs 14
+
+This project is a fork of [ijjk/notion-blog](https://github.com/ijjk/notion-blog) with the following changes:
+
+- Updated to Next.js 14 with App Router
+- Use of the `@notionhq/client` package for fetching data from Notion
 
 This is an example Next.js project that shows Next.js' upcoming SSG (static-site generation) support using Notion's **private** API for a backend.
 
 **Note**: This example uses the experimental SSG hooks only available in the Next.js canary branch! The APIs used within this example will change over time. Since it is using a private API and experimental features, use at your own risk as these things could change at any moment.
 
-**Live Example hosted on Vercel**: https://notion-blog.vercel.app/
+**Live Example hosted on Vercel**: https://notion-blog-nextjs14.vercel.app/
 
 ## Getting Started
 
@@ -14,13 +19,13 @@ To view the steps to setup Notion to work with this example view the post at htt
 
 Deploy your own Notion blog with Vercel.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/ijjk/notion-blog/tree/main&project-name=notion-blog&repository-name=notion-blog)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/lyuai/notion-blog/tree/main&project-name=notion-blog&repository-name=notion-blog)
 
 or
 
-1. Clone this repo `git clone https://github.com/ijjk/notion-blog.git`
+1. Clone this repo `git clone https://github.com/lyuai/notion-blog.git`
 2. Configure project with [`vc`](https://vercel.com/download)
-3. Add your `NOTION_TOKEN` and `BLOG_INDEX_ID` as environment variables in [your project](https://vercel.com/docs/integrations?query=envir#project-level-apis/project-based-environment-variables). See [here](#getting-blog-index-and-token) for how to find these values
+3. Add your `NOTION_API_KEY` and `NOTION_BLOG_DATABASE_ID` as environment variables in [your project](https://vercel.com/docs/integrations?query=envir#project-level-apis/project-based-environment-variables). See [here](#getting-blog-index-and-token) for how to find these values
 4. Do final deployment with `vc`
 
 Note: if redeploying with `vc` locally and you haven't made any changes to the application's source and only edited in Notion you will need use `vc -f` to bypass build de-duping
@@ -32,9 +37,9 @@ Note: if redeploying with `vc` locally and you haven't made any changes to the a
 ### Using the Pre-Configured Script
 
 1. Create a blank page in Notion
-2. Clone this repo `git clone https://github.com/ijjk/notion-blog.git`
+2. Clone this repo `git clone https://github.com/lyuai/notion-blog.git`
 3. Install dependencies `cd notion-blog && yarn`
-4. Run script to create table `NOTION_TOKEN='token' BLOG_INDEX_ID='new-page-id' node scripts/create-table.js` See [here](#getting-blog-index-and-token) for finding the id for the new page
+4. Run script to create table `NOTION_API_KEY='token' NOTION_BLOG_DATABASE_ID='new-page-id' node scripts/create-table.js` See [here](#getting-blog-index-and-token) for finding the id for the new page
 
 ### Manually Creating the Table
 
@@ -56,10 +61,10 @@ The table should have the following properties:
 
 To get your blog index value, open Notion and Navigate to the Notion page with the table you created above. While on this page you should be able to get the page id from either:
 
-- the URL, if the URL of your page is https://www.notion.so/Blog-S5qv1QbUzM1wxm3H3SZRQkupi7XjXTul then your `BLOG_INDEX_ID` is `S5qv1QbU-zM1w-xm3H-3SZR-Qkupi7XjXTul`
-- the `loadPageChunk` request, if you open your developer console and go to the network tab then reload the page you should see a request for `loadPageChunk` and in the request payload you should see a `pageId` and that is your `BLOG_INDEX_ID`
+- the URL, if the URL of your page is https://www.notion.so/Blog-S5qv1QbUzM1wxm3H3SZRQkupi7XjXTul then your `NOTION_BLOG_DATABASE_ID` is `S5qv1QbU-zM1w-xm3H-3SZR-Qkupi7XjXTul`
+- the `loadPageChunk` request, if you open your developer console and go to the network tab then reload the page you should see a request for `loadPageChunk` and in the request payload you should see a `pageId` and that is your `NOTION_BLOG_DATABASE_ID`
 
-To get your Notion token, open Notion and look for the `token_v2` cookie.
+To get your Notion token, please refer this article https://developers.notion.com/docs/create-a-notion-integration about how to create an Integration and grant Integration the acess to the database.
 
 ## Creating Blog Posts
 
@@ -74,7 +79,7 @@ To get your Notion token, open Notion and look for the `token_v2` cookie.
 To run the project locally you need to follow steps 1 and 2 of [deploying](#deploy-your-own) and then follow the below steps
 
 1. Install dependencies `yarn`
-2. Expose `NOTION_TOKEN` and `BLOG_INDEX_ID` in your environment `export NOTION_TOKEN='<your-token>'`and `export BLOG_INDEX_ID='<your-blog-index-id>'` or `set NOTION_TOKEN="<your-token>" && set BLOG_INDEX_ID="<your-blog-index-id>"` for Windows
+2. Expose `NOTION_API_KEY` and `NOTION_BLOG_DATABASE_ID` in your environment `export NOTION_API_KEY='<your-token>'`and `export NOTION_BLOG_DATABASE_ID='<your-blog-index-id>'` or `set NOTION_API_KEY="<your-token>" && set NOTION_BLOG_DATABASE_ID="<your-blog-index-id>"` for Windows
 3. Run next in development mode `yarn dev`
 4. Build and run in production mode `yarn build && yarn start`
 

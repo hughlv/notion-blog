@@ -1,3 +1,4 @@
+"use client";
 import Prism from 'prismjs'
 import 'prismjs/components/prism-jsx'
 
@@ -10,7 +11,7 @@ const Code = ({ children, language = 'javascript' }) => {
             __html: Prism.highlight(
               children,
               Prism.languages[language.toLowerCase()] ||
-                Prism.languages.javascript
+              Prism.languages.javascript
             ),
           }}
         />

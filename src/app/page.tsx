@@ -1,7 +1,7 @@
-import Header from '../components/header'
-import ExtLink from '../components/ext-link'
-import Features from '../components/features'
-import sharedStyles from '../styles/shared.module.css'
+import Header from '@/components/header'
+import ExtLink from '@/components/ext-link'
+import Features from '@/components/features'
+import sharedStyles from '@/styles/shared.module.css'
 
 export default function Index() {
   return (
@@ -34,14 +34,7 @@ export default function Index() {
             <ExtLink href="https://nextjs.org">Next.js</ExtLink> site with a{' '}
             <ExtLink href="https://notion.so">Notion</ExtLink> powered blog that
             is deployed with <ExtLink href="https://vercel.com">Vercel</ExtLink>
-            . It leverages some upcoming features in Next.js like{' '}
-            <ExtLink href="https://github.com/vercel/next.js/issues/9524">
-              SSG support
-            </ExtLink>{' '}
-            and{' '}
-            <ExtLink href="https://github.com/vercel/next.js/issues/8626">
-              built-in CSS support
-            </ExtLink>{' '}
+            . It leverages some cool new features of Next.js 14
             which allow us to achieve all of the benefits listed above including
             blazing fast speeds, great local editing experience, and always
             being available!
@@ -52,13 +45,10 @@ export default function Index() {
             button below. After you supply your token and the blog index id (the
             page's id in Notion) we will automatically create the table for you!
             See{' '}
-            <ExtLink href="https://github.com/ijjk/notion-blog#getting-blog-index-and-token">
+            <ExtLink href="https://github.com/lyuai/notion-blog#getting-blog-index-and-token">
               here in the readme
             </ExtLink>{' '}
-            for finding the new page's id. To get your token from Notion, login
-            and look for a cookie under www.notion.so with the name `token_v2`.
-            After finding your token and your blog's page id you should be good
-            to go!
+            for finding the new page's id.
           </p>
         </div>
       </div>

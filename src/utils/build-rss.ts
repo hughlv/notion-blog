@@ -39,12 +39,12 @@ function mapToEntry(post) {
       <content type="xhtml">
         <div xmlns="http://www.w3.org/1999/xhtml">
           ${renderToStaticMarkup(
-            post.preview
-              ? (post.preview || []).map((block, idx) =>
-                  textBlock(block, false, post.title + idx)
-                )
-              : post.content
-          )}
+    post.preview
+      ? (post.preview || []).map((block, idx) =>
+        textBlock(block, false, post.title + idx)
+      )
+      : post.content
+  )}
           <p class="more">
             <a href="${post.link}">Read more</a>
           </p>
@@ -74,9 +74,9 @@ function createRSS(blogPosts = []) {
 
 async function main() {
   await loadEnvConfig(process.cwd())
-  serverConstants.NOTION_TOKEN = process.env.NOTION_TOKEN
-  serverConstants.BLOG_INDEX_ID = serverConstants.normalizeId(
-    process.env.BLOG_INDEX_ID
+  serverConstants.NOTION_API_KEY = process.env.NOTION_API_KEY
+  serverConstants.NOTION_BLOG_DATABASE_ID = serverConstants.normalizeId(
+    process.env.NOTION_BLOG_DATABASE_ID
   )
 
   const postsTable = await getBlogIndex(true)

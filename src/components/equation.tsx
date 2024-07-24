@@ -1,28 +1,30 @@
-import { renderToString, ParseError } from 'katex'
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
+import { PropsWithChildren } from 'react';
 
 function render(expression: string, displayMode: boolean): string {
-  let result: string
+  let result: string;
   try {
-    result = renderToString(expression, { displayMode: displayMode })
+    result = katex.renderToString(expression, { displayMode });
   } catch (e) {
-    if (e instanceof ParseError) {
-      result = e.message
+    if (e instanceof katex.ParseError) {
+      result = e.message;
     }
     if (process.env.NODE_ENV !== 'production') {
-      console.error(e)
+      console.error(e);
     }
   }
-  return result
+  return result;
 }
 
-const Equation = ({ children, displayMode = true }) => {
+const Equation = ({ children, displayMode = true }: PropsWithChildren<any>) => {
   return (
     <span
       dangerouslySetInnerHTML={{
         __html: render(children, displayMode),
       }}
     />
-  )
+  );
 }
 
-export default Equation
+export default Equation;
