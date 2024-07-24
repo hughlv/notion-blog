@@ -10,10 +10,6 @@ export const getDateStr = (date: string) => {
   });
 };
 
-export const postIsPublished = (post: any) => {
-  return post.Published;
-};
-
 export const normalizeSlug = (slug: any): any => {
   if (typeof slug !== 'string') return slug;
 

@@ -49,14 +49,6 @@ const nextConfig = {
     // Enable shared caching for Notion data in build mode
     process.env.USE_CACHE = 'true';
 
-    // Modify the Webpack entry to include build-rss script
-    const originalEntry = config.entry;
-    config.entry = async () => {
-      const entries = { ...(await originalEntry()) };
-      entries['build-rss.js'] = './src/lib/build-rss.ts';
-      return entries;
-    };
-
     return config;
   },
 };

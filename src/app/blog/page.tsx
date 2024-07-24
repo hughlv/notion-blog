@@ -5,10 +5,8 @@ import blogStyles from '@/styles/blog.module.css';
 import sharedStyles from '@/styles/shared.module.css';
 
 import {
-  getBlogLink,
-  getDateStr,
-  postIsPublished,
-} from '../../utils/blog-helpers';
+  getDateStr
+} from '@/utils/blog-helpers';
 import { getBlogIndex, getNotionUsers } from '@/utils/notion';
 
 // Fetch data during build time
@@ -24,7 +22,7 @@ export default async function BlogPage({ searchParams }: any) {
     .map((slug) => {
       const post = postsTable[slug];
       // remove draft posts in production
-      if (!preview && !postIsPublished(post)) {
+      if (!preview && !post.Published) {
         return null;
       }
       post.Authors = post.Authors || [];
